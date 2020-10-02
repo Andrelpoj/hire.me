@@ -3,7 +3,27 @@ version: '3.8'
 services: 
     url-shortener:
         build: .
+        env_file: database.conf
+        environment:
+            WAIT_HOSTS: db:5432
+            WAIT_HOSTS_TIMEOUT: 120
+            WAIT_SLEEP_INTERVAL: 30
+            WAIT_HOST_CONNECT_TIMEOUT: 30
+        depends_on: 
+            - db
         volumes:
             - .:/usr/src/app
         ports:
             - 5000:80
+    db:
+        container_name: postgres
+        environment:
+            POSTGRES_DB: example
+            POSTGRES_USER: test
+            POSTGRES_PASSWORD: password
+        env_file: database.conf
+        image: postgres:11
+        ports:
+            - 5432:5432
+        volumes:
+            - ./postgres-data:/var/lib/postgresql/data

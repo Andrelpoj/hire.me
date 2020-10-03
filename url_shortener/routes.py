@@ -22,14 +22,21 @@ def index():
 
 @short.route('/<alias>',methods=['GET'])
 def get_link(alias):
-    link = Link.query.filter_by(alias=alias).first_or_404()
+    link = Link.query.filter_by(alias=alias).first()
+
+    if not link:
+        return {
+            'alias': alias,
+            'err_code': '002',
+            'description': 'Shortened URL not found'
+        }, 404
 
     return { 
         'alias': link.alias,
         'long_url': link.long_url,
         }, 200
 
-@short.route('/u', methods=['POST'])
+@short.route('/addlink', methods=['POST'])
 @use_kwargs({'url': fields.Str(required=True), 'custom_alias': fields.Str(required=False)}, location='query')
 def add_link(**kwargs):
     start_time = datetime.now()
@@ -49,8 +56,8 @@ def add_link(**kwargs):
 
     return {
         'message': 'Short URL created', 
+        'alias': new_short_url.alias,
         'url': new_short_url.long_url, 
-        'custom_alias': new_short_url.alias,
         'time_taken': f'{execution_time}ms'
     }, 201
 

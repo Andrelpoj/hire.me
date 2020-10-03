@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 
 from .extensions import db
-from .models import Link, shorten_url
+from .models import Link, shorten_url, AliasAlreadyExists
 
 
 short = Blueprint('short', __name__)
@@ -43,7 +43,7 @@ def add_link(**kwargs):
 
     db.session.add(new_short_url)
     db.session.commit()
-    
+
     end_time = datetime.now()
     execution_time = (end_time - start_time).total_seconds() * 1000
 
@@ -52,4 +52,12 @@ def add_link(**kwargs):
         'url': new_short_url.long_url, 
         'custom_alias': new_short_url.alias,
         'time_taken': f'{execution_time}ms'
-        }, 201
+    }, 201
+
+@short.errorhandler(AliasAlreadyExists)
+def handle_alias_already_exists(e):
+    return {
+            'alias': e.alias,
+            'err_code': '001',
+            'description': 'Custom Alias already exists'
+        }, 400

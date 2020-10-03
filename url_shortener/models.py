@@ -18,7 +18,11 @@ class Link(db.Model):
     def __init__(self, **kwargs):
         super().__init__(**kwargs) 
         
-        if "alias" not in kwargs:
+        if "alias" in kwargs:
+            link = Link.query.filter_by(alias=kwargs["alias"]).first() 
+            if link:
+                raise AliasAlreadyExists(kwargs["alias"])
+        else:
             self.alias = self.shorten_url(kwargs["long_url"])
 
 def shorten_url(long_url):
@@ -27,8 +31,14 @@ def shorten_url(long_url):
     short_url = b64[:8].decode('ascii')
 
     #Deals with collisions
-    if Link.query.filter_by(alias=short_url).first():            
+    link = Link.query.filter_by(alias=short_url).first() 
+    if link:            
         random_sufix = ''.join(random.choices(string.ascii_letters, k=3))
         return shorten_url(long_url + random_sufix)
 
     return short_url 
+
+
+class AliasAlreadyExists(Exception):
+    def __init__(self, alias):
+        self.alias = alias

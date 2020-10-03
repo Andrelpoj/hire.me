@@ -5,7 +5,8 @@ from webargs.flaskparser import use_args
 import markdown 
 import os  
 
-from .models import Short_URLs, db
+from .models import Link
+from .extensions import db
 from . import config
 
 app = Flask(__name__)
@@ -30,11 +31,11 @@ def index():
 
 class Short_URL(Resource):
     def get(self, alias):
-        short_url = Short_URLs.query.get(alias)
+        link = Link.query.filter_by(alias=alias).first_or_404()
 
         return { 
-            'alias': short_url.alias,
-            'long_url': short_url.url
+            'alias': link.alias,
+            'long_url': link.long_url
             }, 200
 
     @use_args({
@@ -43,7 +44,7 @@ class Short_URL(Resource):
         }, location='query')
     def post(self, args):
         
-        new_short_url = Short_URLs(alias=args['custom_alias'], url=args['url'])
+        new_short_url = Link(alias=args['custom_alias'], long_url=args['url'])
         db.session.add(new_short_url)
         db.session.commit()
         

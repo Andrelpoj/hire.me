@@ -31,6 +31,10 @@ def get_link(alias):
             'description': 'Shortened URL not found'
         }, 404
 
+    #Updates visits
+    link.visits += 1
+    db.session.commit()
+
     #Guarantees redirect to a Full URL
     url = link.long_url
     if url.find("http://") != 0 and url.find("https://") != 0:
@@ -62,6 +66,16 @@ def add_link(**kwargs):
         'url': new_short_url.long_url, 
         'time_taken': f'{execution_time}ms'
     }, 201
+
+@short.route('/top', methods=['GET'])
+def get_top_links():
+    links = Link.query.order_by(Link.visits.desc()).limit(10)
+
+    result = {}
+    for link in links:
+        result[link.alias] = link.visits
+
+    return result, 200
 
 @short.errorhandler(AliasAlreadyExists)
 def handle_alias_already_exists(e):

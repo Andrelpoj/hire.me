@@ -1,12 +1,6 @@
 from flask import Flask
-from flask_restful import Resource, Api
-from webargs import fields
-from webargs.flaskparser import use_args
-import markdown 
-import os  
-
-from .models import Link
 from .extensions import db
+from .routes import short
 from . import config
 
 app = Flask(__name__)
@@ -17,42 +11,4 @@ app.app_context().push()
 db.init_app(app)
 db.create_all()
         
-api = Api(app)
-
-
-@app.route("/")
-def index():
-    """Present API Documentation"""
-
-    with open(os.path.dirname(app.root_path) + '/README.md', 'r') as readme:
-        content = readme.read()
-        return markdown.markdown(content)
-
-
-class Short_URL(Resource):
-    def get(self, alias):
-        link = Link.query.filter_by(alias=alias).first_or_404()
-
-        return { 
-            'alias': link.alias,
-            'long_url': link.long_url
-            }, 200
-
-    @use_args({
-        'url': fields.Str(required=True),
-        'custom_alias': fields.Str(required=True)
-        }, location='query')
-    def post(self, args):
-        
-        new_short_url = Link(alias=args['custom_alias'], long_url=args['url'])
-        db.session.add(new_short_url)
-        db.session.commit()
-        
-        return {
-            'message': 'Added', 
-            'url': args['url'], 
-            'custom_alias': args['custom_alias']
-            }, 201
-
-
-api.add_resource(Short_URL, '/u', '/u/<alias>')
+app.register_blueprint(short)

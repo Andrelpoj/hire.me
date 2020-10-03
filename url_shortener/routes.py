@@ -5,9 +5,9 @@ import markdown
 import os  
 from datetime import datetime
 
-
 from .extensions import db
-from .models import Link
+from .models import Link, shorten_url
+
 
 short = Blueprint('short', __name__)
 
@@ -37,7 +37,7 @@ def add_link(**kwargs):
     if 'custom_alias' in kwargs:
         alias = kwargs['custom_alias']
     else:
-        alias = Link.shorten_url(kwargs['url'])
+        alias = shorten_url(kwargs['url'])
     
     new_short_url = Link(long_url=kwargs['url'], alias=alias)
 

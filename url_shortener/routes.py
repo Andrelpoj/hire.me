@@ -1,6 +1,6 @@
 from flask import Blueprint
 from webargs import fields
-from webargs.flaskparser import use_args
+from webargs.flaskparser import use_args, use_kwargs
 import markdown 
 import os  
 from datetime import datetime
@@ -30,11 +30,17 @@ def get_link(alias):
         }, 200
 
 @short.route('/u', methods=['POST'])
-@use_args({'url': fields.Str(required=True), 'custom_alias': fields.Str(required=True)}, location='query')
-def add_link(args):
+@use_kwargs({'url': fields.Str(required=True), 'custom_alias': fields.Str(required=False)}, location='query')
+def add_link(**kwargs):
     start_time = datetime.now()
 
-    new_short_url = Link(alias=args['custom_alias'], long_url=args['url'])
+    if 'custom_alias' in kwargs:
+        alias = kwargs['custom_alias']
+    else:
+        alias = Link.shorten_url(kwargs['url'])
+    
+    new_short_url = Link(long_url=kwargs['url'], alias=alias)
+
     db.session.add(new_short_url)
     db.session.commit()
     
@@ -43,7 +49,7 @@ def add_link(args):
 
     return {
         'message': 'Short URL created', 
-        'url': args['url'], 
-        'custom_alias': args['custom_alias'],
+        'url': new_short_url.long_url, 
+        'custom_alias': new_short_url.alias,
         'time_taken': f'{execution_time}ms'
         }, 201

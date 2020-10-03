@@ -11,15 +11,15 @@ class Link(db.Model):
     visits = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.now)
 
-def __init__(self, **kwargs):
-    super().__init__(**kwargs)
-    
-    if self.alias is None:    
-        self.alias = self.shorten_url()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs) 
+        
+        if "alias" not in kwargs:
+            self.alias = self.shorten_url(kwargs["long_url"])
 
-def shorten_url(long_url):
-    hashed = hashlib.md5(long_url.encode()).digest()
-    b64 = base64.b64encode(hashed, altchars='~_'.encode())
-    short_url = b64[:9].decode('ascii')
+    def shorten_url(long_url):
+        hashed = hashlib.md5(long_url.encode()).digest()
+        b64 = base64.b64encode(hashed, altchars='~_'.encode())
+        short_url = b64[:8].decode('ascii')
 
-    return short_url 
+        return short_url 

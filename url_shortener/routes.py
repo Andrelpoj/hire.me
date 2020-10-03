@@ -3,6 +3,8 @@ from webargs import fields
 from webargs.flaskparser import use_args
 import markdown 
 import os  
+from datetime import datetime
+
 
 from .extensions import db
 from .models import Link
@@ -24,18 +26,24 @@ def get_link(alias):
 
     return { 
         'alias': link.alias,
-        'long_url': link.long_url
+        'long_url': link.long_url,
         }, 200
 
 @short.route('/u', methods=['POST'])
 @use_args({'url': fields.Str(required=True), 'custom_alias': fields.Str(required=True)}, location='query')
 def add_link(args):
+    start_time = datetime.now()
+
     new_short_url = Link(alias=args['custom_alias'], long_url=args['url'])
     db.session.add(new_short_url)
     db.session.commit()
     
+    end_time = datetime.now()
+    execution_time = (end_time - start_time).total_seconds() * 1000
+
     return {
-        'message': 'Added', 
+        'message': 'Short URL created', 
         'url': args['url'], 
-        'custom_alias': args['custom_alias']
+        'custom_alias': args['custom_alias'],
+        'time_taken': f'{execution_time}ms'
         }, 201

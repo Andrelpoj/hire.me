@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request, redirect
 from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
 import markdown 
@@ -31,10 +31,12 @@ def get_link(alias):
             'description': 'Shortened URL not found'
         }, 404
 
-    return { 
-        'alias': link.alias,
-        'long_url': link.long_url,
-        }, 200
+    #Guarantees redirect to a Full URL
+    url = link.long_url
+    if url.find("http://") != 0 and url.find("https://") != 0:
+        url = "http://" + url
+         
+    return redirect(url, code=302)
 
 @short.route('/addlink', methods=['POST'])
 @use_kwargs({'url': fields.Str(required=True), 'custom_alias': fields.Str(required=False)}, location='query')

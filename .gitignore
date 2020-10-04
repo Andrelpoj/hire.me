@@ -1,3 +1,9 @@
+
+# Ignore Postgres Data
+postgres-data/
+
+.vscode/
+
 # Py Cache
 __pycache__/
 *.pyc 

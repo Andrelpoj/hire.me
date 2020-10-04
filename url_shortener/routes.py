@@ -5,8 +5,8 @@ import markdown
 import os  
 from datetime import datetime
 
-from .extensions import db
-from .models import Link, shorten_url, AliasAlreadyExists
+from extensions import db
+from models import Link, shorten_url, AliasAlreadyExists
 
 
 short = Blueprint('short', __name__)

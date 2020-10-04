@@ -4,7 +4,7 @@ import base64
 import random
 import string
 
-from .extensions import db
+from extensions import db
 
 
 class Link(db.Model):

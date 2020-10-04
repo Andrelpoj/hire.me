@@ -34,16 +34,11 @@ def get_link(alias):
     #Updates visits
     link.visits += 1
     db.session.commit()
-
-    #Guarantees redirect to a Full URL
-    url = link.long_url
-    if url.find("http://") != 0 and url.find("https://") != 0:
-        url = "http://" + url
-         
+     
     return redirect(url, code=302)
 
 @short.route('/addlink', methods=['POST'])
-@use_kwargs({'url': fields.Str(required=True), 'custom_alias': fields.Str(required=False)}, location='query')
+@use_kwargs({'url': fields.Url(required=True), 'custom_alias': fields.Str(required=False)}, location='query')
 def add_link(**kwargs):
     start_time = datetime.now()
 

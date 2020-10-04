@@ -1,7 +1,7 @@
 from flask import Flask
-from extensions import db
-from routes import short
-import config
+from .extensions import db
+from .routes import short
+from . import config
 
 def create_app():
     app = Flask(__name__)

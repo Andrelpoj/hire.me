@@ -5,8 +5,8 @@ import markdown
 import os  
 from datetime import datetime
 
-from extensions import db
-from models import Link, shorten_url, AliasAlreadyExists
+from .extensions import db
+from .models import Link, shorten_url, AliasAlreadyExists
 
 
 short = Blueprint('short', __name__)
@@ -15,7 +15,7 @@ short = Blueprint('short', __name__)
 def index():
     """Present API Documentation"""
 
-    with open(os.path.abspath("README.md"), 'r') as readme:
+    with open(os.path.abspath("API_DOC.md"), 'r') as readme:
         content = readme.read()
         return markdown.markdown(content)
 

@@ -31,13 +31,16 @@ def shorten_url(long_url):
     short_url = b64[:8].decode('ascii')
 
     #Deals with collisions
-    link = Link.query.filter_by(alias=short_url).first() 
-    if link:            
+    if alias_exists(short_url):            
         random_sufix = ''.join(random.choices(string.ascii_letters, k=3))
         return shorten_url(long_url + random_sufix)
 
     return short_url 
 
+def alias_exists(alias):
+    if Link.query.filter_by(alias=alias).first():
+        return True 
+    return False
 
 class AliasAlreadyExists(Exception):
     def __init__(self, alias):

@@ -1,6 +1,7 @@
 flask==1.1.2
-flask-restful==0.3.8
 flask-sqlalchemy==2.4.4
 psycopg2==2.8.6
 markdown==3.2.2
 webargs==6.1.1
+pytest==6.1.1
+pytest-mock==3.3.1

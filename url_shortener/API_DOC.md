@@ -1,7 +1,12 @@
 # URL Shortener API
 
-Documentação do projeto URL Shortener para o processo seletivo da Bemobi.
+Documentação do projeto URL Shortener para o processo seletivo da Bemobi. 
+Para rodar o projeto basta seguir os seguintes passos:
+1. Clonar o repositório
+2. Executar o comando docker-compose build
+3. Executar o comando docker-compose up
 
+Obs.: A primeira inicialização demora um pouco mais devido a criação do banco.
 
 ### Shorten URL
 ![Shorten URL](https://tinyurl.com/yydlnqg4)
@@ -58,6 +63,26 @@ PUT http://localhost:5000/addlink?url=http://www.github.com&custom_alias=bemobi
 2. A url original é recuperada através de uma consulta ao banco de dados Postgres.
 3. É retornado um redirecionamento para a url original.
 
-
 ### Top Viewed URLs
+![Top URLs](https://tinyurl.com/y2tpshcn)
+1. Realize uma chamada ao endpoint ``` /top ```.
+2. É retornado um JSON com as 10 urls mais accessadas e sua quantidade de visitas.
 
+Exemplo:
+
+``` 
+GET http://localhost:5000/top
+
+{
+    "1V0H_0~X": 4,
+    "7g62Ji5_": 2,
+    "K88Lbt3I": 3,
+    "QeuJ6sPy": 10,
+    "TAkcAEf8": 13,
+    "a9MWHVva": 5,
+    "l9lDxS8I": 6,
+    "ossy0Vtd": 8,
+    "phO8CXWY": 11,
+    "tes": 20
+}
+```

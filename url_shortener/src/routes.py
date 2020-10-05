@@ -15,7 +15,7 @@ short = Blueprint('short', __name__)
 def index():
     """Present API Documentation"""
 
-    with open(os.path.abspath("API_DOC.md"), 'r') as readme:
+    with open(os.path.abspath("./docs/API_DOC.md"), 'r') as readme:
         content = readme.read()
         return markdown.markdown(content)
 

@@ -4,6 +4,7 @@ from .routes import short
 from . import config
 
 def create_app():
+    """ Creates Flask App, connect to Database and register Blueprint of routes"""
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_CONNECTION_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

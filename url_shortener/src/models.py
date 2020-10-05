@@ -26,16 +26,24 @@ class Link(db.Model):
             self.alias = self.shorten_url(kwargs["long_url"])
 
 def shorten_url(long_url):
+    """ 
+        Returns a unique alias for a long_url.
+
+        1. Receives a string
+        2. Applies hashing algorithm - MD5
+        3. Applies encoding of base64
+        4. Returns an slice of 8 characters
+    """
     hashed = hashlib.md5(long_url.encode()).digest()
     b64 = base64.b64encode(hashed, altchars='~_'.encode())
-    short_url = b64[:8].decode('ascii')
+    alias = b64[:8].decode('ascii')
 
     #Deals with collisions
-    if alias_exists(short_url):            
+    if alias_exists(alias):            
         random_sufix = ''.join(random.choices(string.ascii_letters, k=3))
         return shorten_url(long_url + random_sufix)
 
-    return short_url 
+    return alias 
 
 def alias_exists(alias):
     if Link.query.filter_by(alias=alias).first():

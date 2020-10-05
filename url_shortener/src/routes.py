@@ -22,6 +22,8 @@ def index():
 
 @short.route('/<alias>',methods=['GET'])
 def get_link(alias):
+    """ Retrieve URL Endpoint """
+
     link = Link.query.filter_by(alias=alias).first()
 
     if not link:
@@ -37,9 +39,12 @@ def get_link(alias):
      
     return redirect(link.long_url, code=302)
 
+
 @short.route('/addlink', methods=['POST'])
 @use_kwargs({'url': fields.Url(required=True), 'custom_alias': fields.Str(required=False)}, location='query')
 def add_link(**kwargs):
+    """ Shorten URL Endpoint """
+    
     start_time = datetime.now()
 
     if 'custom_alias' in kwargs:
@@ -62,8 +67,10 @@ def add_link(**kwargs):
         'time_taken': f'{execution_time}ms'
     }, 201
 
+
 @short.route('/top', methods=['GET'])
 def get_top_links():
+    """ Top URLs Endpoint"""
     links = Link.query.order_by(Link.visits.desc()).limit(10)
 
     result = {}

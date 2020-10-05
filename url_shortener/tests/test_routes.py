@@ -19,6 +19,19 @@ def test_retrieve_url(client, mocker):
     assert response.status == '302 FOUND'
     assert url.encode() in response.data
 
+def test_retrieve_url_not_found(client, mocker):
+    alias = 'tes'
+    mocker.patch(
+        "src.models.Link.find_by_alias",
+        return_value= {}
+    )
+    
+    response = client.get('/'+alias)
+
+    assert response.status == '404 NOT FOUND'
+    assert alias.encode() in response.data
+
+
 def test_shorten_url_without_alias(client, mocker):
     url = 'https://www.bemobi.com'
     mocker.patch('src.routes.shorten_url', return_value='mockedup')
@@ -50,6 +63,7 @@ def test_shorten_url_with_conflicted_alias(client, mocker):
     assert response.status == '400 BAD REQUEST'
     assert custom_alias in response.data.decode()
 
+
 def test_top_urls(client, mocker):
     mocker.patch(
         "src.routes.Link.top_most_visited",
@@ -59,6 +73,7 @@ def test_top_urls(client, mocker):
     response = client.get('/top')
 
     assert response.status == '200 OK'
+
 
 def mocked_link_creator(long_url, alias):
     return SimpleNamespace(**{

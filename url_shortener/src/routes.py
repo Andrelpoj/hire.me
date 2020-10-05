@@ -31,7 +31,7 @@ def get_link(alias):
             'alias': alias,
             'err_code': '002',
             'description': 'Shortened URL not found'
-        }, 
+        }, 404
 
     link.increment_visits()
  

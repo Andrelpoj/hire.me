@@ -86,3 +86,8 @@ GET http://localhost:5000/top
     "tes": 20
 }
 ```
+
+## Testes
+
+Comando para executar os testes:
+``` docker-compose run url-shortener py.test ```

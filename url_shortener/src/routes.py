@@ -35,7 +35,7 @@ def get_link(alias):
     link.visits += 1
     db.session.commit()
      
-    return redirect(url, code=302)
+    return redirect(link.long_url, code=302)
 
 @short.route('/addlink', methods=['POST'])
 @use_kwargs({'url': fields.Url(required=True), 'custom_alias': fields.Str(required=False)}, location='query')

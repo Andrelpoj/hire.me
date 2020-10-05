@@ -67,7 +67,8 @@ def add_link(**kwargs):
 @short.route('/top', methods=['GET'])
 def get_top_links():
     """ Top URLs Endpoint"""
-    links = Link.query.order_by(Link.visits.desc()).limit(10)
+    
+    links = Link.top_most_visited()
 
     result = {}
     for link in links:

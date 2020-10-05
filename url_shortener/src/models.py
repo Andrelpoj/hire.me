@@ -37,9 +37,9 @@ class Link(db.Model):
     def find_by_alias(alias):
         return Link.query.filter_by(alias=alias).first()
 
-    # @staticmethod
-    # def alias_exists(alias):
-    #     return bool(find_by_alias)
+    @staticmethod
+    def top_most_visited(quant=10):
+        return Link.query.order_by(Link.visits.desc()).limit(quant)
 
 def shorten_url(long_url):
     """ 

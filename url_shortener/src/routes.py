@@ -32,10 +32,7 @@ def get_link(alias):
             'err_code': '002',
             'description': 'Shortened URL not found'
         }, 
-    
-    #Updates visits
-    # link.visits += 1
-    # db.session.commit()
+
     link.increment_visits()
  
     return redirect(link.long_url, code=302)
@@ -54,9 +51,7 @@ def add_link(**kwargs):
         alias = shorten_url(kwargs['url'])
     
     new_short_url = Link(long_url=kwargs['url'], alias=alias)
-
-    db.session.add(new_short_url)
-    db.session.commit()
+    new_short_url.save_to_database()
 
     end_time = datetime.now()
     execution_time = (end_time - start_time).total_seconds() * 1000

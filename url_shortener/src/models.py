@@ -11,7 +11,7 @@ class Link(db.Model):
     __tablename__ = 'link'
     id = db.Column(db.Integer, primary_key=True)
     long_url = db.Column(db.String(512))
-    alias = db.Column(db.String(8), unique=True)
+    alias = db.Column(db.String(12), unique=True)
     visits = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.now)
 
@@ -29,13 +29,17 @@ class Link(db.Model):
         self.visits += 1
         db.session.commit()
     
+    def save_to_database(self):
+        db.session.add(self)
+        db.session.commit()
+    
     @staticmethod 
     def find_by_alias(alias):
         return Link.query.filter_by(alias=alias).first()
 
-    @staticmethod
-    def alias_exists(alias):
-        return bool(find_by_alias)
+    # @staticmethod
+    # def alias_exists(alias):
+    #     return bool(find_by_alias)
 
 def shorten_url(long_url):
     """ 
@@ -51,7 +55,7 @@ def shorten_url(long_url):
     alias = b64[:8].decode('ascii')
 
     #Deals with collisions
-    if Link.alias_exists(alias):            
+    if Link.find_by_alias(alias):            
         random_sufix = ''.join(random.choices(string.ascii_letters, k=3))
         return shorten_url(long_url + random_sufix)
 

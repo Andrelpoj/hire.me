@@ -24,6 +24,18 @@ class Link(db.Model):
                 raise AliasAlreadyExists(kwargs["alias"])
         else:
             self.alias = self.shorten_url(kwargs["long_url"])
+    
+    def increment_visits(self):
+        self.visits += 1
+        db.session.commit()
+    
+    @staticmethod 
+    def find_by_alias(alias):
+        return Link.query.filter_by(alias=alias).first()
+
+    @staticmethod
+    def alias_exists(alias):
+        return bool(find_by_alias)
 
 def shorten_url(long_url):
     """ 
@@ -39,16 +51,11 @@ def shorten_url(long_url):
     alias = b64[:8].decode('ascii')
 
     #Deals with collisions
-    if alias_exists(alias):            
+    if Link.alias_exists(alias):            
         random_sufix = ''.join(random.choices(string.ascii_letters, k=3))
         return shorten_url(long_url + random_sufix)
 
     return alias 
-
-def alias_exists(alias):
-    if Link.query.filter_by(alias=alias).first():
-        return True 
-    return False
 
 class AliasAlreadyExists(Exception):
     def __init__(self, alias):

@@ -24,19 +24,20 @@ def index():
 def get_link(alias):
     """ Retrieve URL Endpoint """
 
-    link = Link.query.filter_by(alias=alias).first()
+    link = Link.find_by_alias(alias)
 
     if not link:
         return {
             'alias': alias,
             'err_code': '002',
             'description': 'Shortened URL not found'
-        }, 404
-
+        }, 
+    
     #Updates visits
-    link.visits += 1
-    db.session.commit()
-     
+    # link.visits += 1
+    # db.session.commit()
+    link.increment_visits()
+ 
     return redirect(link.long_url, code=302)
 
 

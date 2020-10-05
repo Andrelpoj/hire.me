@@ -8,6 +8,11 @@ def app():
     app.register_blueprint(short)
     return app 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session', autouse=True)
+def client(app):
+    return app.test_client()
+
+
+@pytest.fixture
 def db():
     return []

@@ -11,7 +11,7 @@ class Link(db.Model):
     __tablename__ = 'link'
     id = db.Column(db.Integer, primary_key=True)
     long_url = db.Column(db.String(512))
-    alias = db.Column(db.String(12), unique=True)
+    alias = db.Column(db.String(16), unique=True)
     visits = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.now)
 

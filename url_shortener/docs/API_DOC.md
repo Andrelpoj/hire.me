@@ -9,7 +9,7 @@ Para rodar o projeto basta seguir os seguintes passos:
 Obs.: A primeira inicialização demora um pouco mais devido a criação do banco.
 
 ### Shorten URL
-![Shorten URL](https://tinyurl.com/yydlnqg4)
+![Shorten URL]()
 
 1. Realize uma chamada a API passando a **url** a ser encurtada e um parâmetro opcional **custom_alias**.
     1. Caso o **custom_alias** já exista, é retornado um erro ```{err_code: 001, description: Custom Alias already exists }```
@@ -56,7 +56,7 @@ PUT http://localhost:5000/addlink?url=http://www.github.com&custom_alias=bemobi
 
 
 ### Retrieve URL
-![Retrieve URL](https://tinyurl.com/y4rfn44r)
+![Retrieve URL](https://tinyurl.com/yytqr2vk)
 
 1. Realize uma chamada a API passando o **alias** que deseja acessar
     1. Caso não exista um link com esse **alias** é retornado um erro ```{err_code: 002, description: Shortened URL not found}```.
@@ -64,7 +64,7 @@ PUT http://localhost:5000/addlink?url=http://www.github.com&custom_alias=bemobi
 3. É retornado um redirecionamento para a url original.
 
 ### Top Viewed URLs
-![Top URLs](https://tinyurl.com/y2tpshcn)
+![Top URLs](https://tinyurl.com/y4nemar4)
 1. Realize uma chamada ao endpoint ``` /top ```.
 2. É retornado um JSON com as 10 urls mais accessadas e sua quantidade de visitas.
 

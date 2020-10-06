@@ -9,8 +9,6 @@ class URLShortenerClient():
         if response.status_code == 404:
             raise AliasNotFound(alias)
             
-        breakpoint()
-
         return response
     
     def shorten_url(url, alias=None):
@@ -20,11 +18,13 @@ class URLShortenerClient():
         
         response = requests.post(req_url)
 
-        breakpoint()
-
         if response.status_code == 400:
             raise AliasAlreadyExists(alias)
 
+        return response
+    
+    def get_top_links():        
+        response = requests.get(URLShortenerClient.service_url + '/top')
         return response
 
 class AliasNotFound(Exception):

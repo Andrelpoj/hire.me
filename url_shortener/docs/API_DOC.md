@@ -9,7 +9,7 @@ Para rodar o projeto basta seguir os seguintes passos:
 Obs.: A primeira inicialização demora um pouco mais devido a criação do banco.
 
 ### Shorten URL
-![Shorten URL]()
+![Shorten URL](https://tinyurl.com/yydlnqg4)
 
 1. Realize uma chamada a API passando a **url** a ser encurtada e um parâmetro opcional **custom_alias**.
     1. Caso o **custom_alias** já exista, é retornado um erro ```{err_code: 001, description: Custom Alias already exists }```
